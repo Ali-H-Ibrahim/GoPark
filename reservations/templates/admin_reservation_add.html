@@ -1,0 +1,77 @@
+{% extends 'vehicle/adminbase.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+<head>
+  <style media="screen">
+    input[type=text],
+    select,
+    input[type=number],
+    textarea {
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    input[type=submit] {
+      width: 100%;
+      background-color: #4CAF50;
+      color: white;
+      padding: 14px 20px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    input[type=submit]:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+
+<br><br><br><br><br>
+<h1 style="text-align:center;">ADD/UPDATE Reservation</h1>
+<div>
+  <form method="POST" enctype="multipart/form-data" style="margin-left:200px;margin-right:200px;">
+    
+    {% csrf_token %}
+
+    <label for="customer">Customer</label>
+    {% render_field form2.customer class="form-control" placeholder="Customer" %}<br>
+
+    <label for="park">Park</label>
+    {% render_field form2.park class="form-control" placeholder="Park" %}
+
+    <label for="reservation_type">Reservation Type</label>
+    {% render_field form1.reservation_type class="form-control" placeholder="Reservation Type" %}
+
+    <label for="reserved_period">Reservation Period</label>
+    {% render_field form1.reserved_period class="form-control" placeholder="By Hours" %}
+
+    <br><br>
+
+    <label for="start_date">Start Date</label>
+    {% render_field form1.start_date class="form-control" placeholder="YYYY-MM-DD HH:MM:SS" %}
+
+    <br><br>
+
+    <label for="end_date">End Date</label>
+    {% render_field form1.end_date class="form-control" placeholder="YYYY-MM-DD" %}
+
+    <br><br>
+  
+    <label for="cost">Cost</label>
+    {% render_field form1.cost class="form-control" placeholder="Cost" %}
+
+    <input type="submit" value="Submit">
+  </form>
+</div>
+
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+{% endblock content %}
