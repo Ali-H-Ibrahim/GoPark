@@ -87,7 +87,7 @@ def car_update(request, id):
         messages.success(request, 'Car Updated Successfully')
         return redirect(reverse('cars:car-list'))
     else:
-        print("Form is invalid")
+        print("form is invalid")
  
     # add form dictionary to context
     context = {'form':  form, 'form2': form2 }

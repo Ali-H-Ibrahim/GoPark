@@ -14,7 +14,7 @@ def addReservation(request):
     user = request.user
 
     # find a free park
-    park = Park.objects.filter(is_free=True)
+    park = Park.objects.filter(is_free=True).first()
     
     # calculate parking cost
     parkingCost = 20000
@@ -28,7 +28,7 @@ def addReservation(request):
             # save reservation object
             Reservation.objects.create(
                 customer         = user,
-                park             = park[0],
+                park             = park,
                 reservation_type = reservationSerializer.validated_data['reservation_type'],
                 reserved_period  = reservationSerializer.validated_data['reserved_period'],
                 start_date       = reservationSerializer.validated_data['start_date'],
@@ -38,9 +38,58 @@ def addReservation(request):
 
             return Response({
                 'message': 'Your reservation has been set successfully !',
-                'park': str(park[0])
+                'park': str(park)
             })
 
         return Response({'error': 'data is not valid'}, status=400)
 
     return Response({'error': 'user not authenticated'}, status=400)
+
+
+@api_view(['GET'])
+def getUserReservations(request):
+
+    reservationsList = []   # store the result
+
+    # get user from request
+    user = request.user
+
+    # get all user's reservations
+    userReservations = Reservation.objects.filter(
+        customer = user
+    )
+
+    if userReservations.count() == 0:
+        return Response({
+            'message': 'No reservations yet'
+        })
+        
+    serializer = ReservationSerializer(userReservations, many=True)
+
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+def updateReservation(request):
+    reservationID = request.query_params['id']
+
+
+@api_view(['GET'])
+def deleteReservation(request):
+    reservationID = request.query_params['id']
+
+    if reservationID != None:
+        reservation = Reservation.objects.get(id=reservationID)
+        if reservation != None:
+            reservation.delete()
+            return Response({
+                'message': 'Deleted Successfully !'
+            })
+
+    
+    return Response({   # otherwise
+        'error': 'Error !'
+    })
+
+
+    
