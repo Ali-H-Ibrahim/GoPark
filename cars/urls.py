@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views
+from . import views, api
 
 app_name='cars'
 
@@ -24,15 +24,16 @@ urlpatterns = [
     path('delete-car/<int:pk>', views.car_delete, name='delete-car'),
     
     # customer cars
-    path('customer-cars/<str:pk>', views.customerCarsPage, name='customer-cars')
+    path('customer-cars/<str:pk>', views.customerCarsPage, name='customer-cars'),
 
-    # # add car to parking
-    # path('admin-approve-request', views.admin_approve_request_view, name='admin-approve-request'),
-    # path('approve-request/<int:pk>', views.approve_request_view, name='approve-request'),
-
-    # # car parking cost
-    # path('admin-view-service-cost', views.admin_view_service_cost_view, name='admin-view-service-cost'),
-
-    # path('update-cost/<int:pk>', views.update_cost_view, name='update-cost'),
+    ########################### APIs urls ###########################
+    # get cars total number
+    path('api/count', api.cars_count_view, name='count-cars'),
+    
+    # get a floor cars number
+    path('api/count-floor-cars/<int:id>', api.floor_cars_count_view, name='count-floor-cars'),
+    
+    # get cost of car
+    path('api/car-cost/<int:id>', api.calulate_car_cost, name='car-cost'),
 
 ]

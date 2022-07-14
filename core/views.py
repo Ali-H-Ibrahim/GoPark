@@ -1,10 +1,11 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect
 from . import models
 from django.contrib.auth import authenticate, login, logout
 from django.db.models import Sum
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from core import models
+from feedbacks.models import Feedback
 
 
 # ============================================================================================
@@ -33,14 +34,14 @@ def afterlogin_view(request):
 def admin_dashboard_view(request):
 
     dict = {
-        'total_customers': models.User.objects.all().count(), #models.Customer.objects.all().count(),
-        'total_cars': models.Car.objects.all().count(), #models.Mechanic.objects.all().count(),
-        'total_incomes': 10, #models.Request.objects.all().count(),
-        'total_feedback': 10, #models.Feedback.objects.all().count(),
-        'total_reservations': models.Reservation.objects.all().count(), #models.Feedback.objects.all().count(),
-        'total_employees': 10, #models.Feedback.objects.all().count(),
-        'total_parks': models.Park.objects.all().count(), #models.Feedback.objects.all().count(),
-        'available_parks': models.Park.objects.filter(is_free=True).count(), #models.Feedback.objects.all().count(),
+        'total_customers': models.User.objects.all().count(),
+        'total_cars': models.Car.objects.all().count(),
+        'total_incomes': 10, 
+        'total_feedback': Feedback.objects.all().count(),
+        'total_reservations': models.Reservation.objects.all().count(),
+        'total_employees': 10, 
+        'total_parks': models.Park.objects.all().count(),
+        'available_parks': models.Park.objects.filter(is_free=True).count(),
         'data': zip([10], [10]),
     }
 
