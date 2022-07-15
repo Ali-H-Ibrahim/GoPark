@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from user import views
 
 
@@ -17,6 +17,8 @@ urlpatterns = [
     path('update-user/<int:pk>', views.update_user, name='update-user'),
 
 
+    # users api's for registration, login and logout
+    path('api/', include('user.api.urls')),
 
 
     ############################ customer ##########################################

@@ -1,7 +1,5 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.authtoken.serializers import AuthTokenSerializer
-from rest_framework.authtoken.models import Token
 from .serializers import ReservationSerializer
 from core.models import Park, Reservation
 
@@ -49,8 +47,6 @@ def addReservation(request):
 @api_view(['GET'])
 def getUserReservations(request):
 
-    reservationsList = []   # store the result
-
     # get user from request
     user = request.user
 
@@ -74,7 +70,7 @@ def updateReservation(request):
     reservationID = request.query_params['id']
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 def deleteReservation(request):
     reservationID = request.query_params['id']
 

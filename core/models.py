@@ -21,8 +21,6 @@ class User(AbstractUser):
     phone_number = models.CharField(max_length=100)
     avatar       = models.ImageField(null=True, blank=True)
 
-    USERNAME_FIELD  = 'email'    # make the user log in with the email
-    REQUIRED_FIELDS = ['username']
 
     def __str__(self):
         return str(self.first_name)+' '+str(self.last_name)
