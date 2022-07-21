@@ -13,7 +13,6 @@ from django.http import HttpResponseRedirect
 from core import models
 from django.contrib.auth.hashers import make_password
 from django.contrib import messages
-from knox.auth import AuthToken
 
 
 
@@ -76,13 +75,11 @@ def add_user(request):
             if userType == "Cashier":
                 a = models.User(first_name=first_name, last_name=last_name, phone_number=phone_number, username=username, email=email, password=password)
                 a.save()
-                _, token = AuthToken.objects.create(user=a)
                 messages.success(request, 'Member was created successfully!')
                 return redirect('manage-users')
             elif userType == "Admin":
                 a = models.User(first_name=first_name, last_name=last_name, phone_number=phone_number, username=username, email=email, password=password)
                 a.save()
-                _, token = AuthToken.objects.create(user=a)
                 messages.success(request, 'Member was created successfully!')
                 return redirect('manage-users') 
             else:
@@ -125,7 +122,6 @@ def update_user(request, pk):
             user.email=email
             user.password=password
             user.save()
-            _, token = AuthToken.objects.create(user=user)
             messages.success(request, 'Member was created successfully!')
             return redirect('users-view') 
     data = {'choice': choice , 'user':user}

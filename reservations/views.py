@@ -68,8 +68,8 @@ def updateReservation(request, pk):
     form2       = ReservationChoiceField()
     
     if request.method == 'POST':
-        form1    = ReservationForm(request.POST, instance=reservation)
-        form2    = ReservationChoiceField(request.POST)
+        form1 = ReservationForm(request.POST, instance=reservation)
+        form2 = ReservationChoiceField(request.POST)
 
         if form1.is_valid() and form2.is_valid():
             form1.customer = form2.cleaned_data['customer']

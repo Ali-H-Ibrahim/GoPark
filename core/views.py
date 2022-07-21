@@ -12,16 +12,10 @@ from feedbacks.models import Feedback
 # ADMIN RELATED views start
 # ============================================================================================
 
+
 def home_view(request):
-    if request.user.is_authenticated:
-        return HttpResponseRedirect('admin-dashboard')
-
-    email    = request.POST.get('email')
-    password = request.POST.get('password')
-
-    user = authenticate(request, email=email, password=password)
-    
-    login(request, user)
+    if request.user.is_authenticated == False :
+        return HttpResponseRedirect('login')
 
     return HttpResponseRedirect('admin-dashboard')
 
@@ -55,6 +49,19 @@ def admin_report_view(request):
 
 def admin_feedback_view(request):
     return render(request, 'vehicle/admin_feedback.html', {})
+
+
+def login(request):
+    if request.POST:
+        email    = request.POST.get('email')
+        password = request.POST.get('password')
+
+        user = authenticate(request, email=email, password=password)
+        
+        login(request, user)
+        return HttpResponseRedirect('admin-dashboard')
+
+    return render(request, 'vehicle/adminlogin.html')
 
 
 def logoutUser(request):
