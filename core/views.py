@@ -6,6 +6,8 @@ from django.db.models import Q
 from django.http import HttpResponseRedirect
 from core import models
 from feedbacks.models import Feedback
+from django.contrib.auth.hashers import make_password
+
 
 
 # ============================================================================================
@@ -34,8 +36,7 @@ def admin_dashboard_view(request):
         'total_feedback': Feedback.objects.all().count(),
         'total_reservations': models.Reservation.objects.all().count(),
         'total_employees': 10, 
-        'total_parks': models.Park.objects.all().count(),
-        'available_parks': models.Park.objects.filter(is_free=True).count(),
+        'total_car_parkings': models.CarParking.objects.all().count(),
         'data': zip([10], [10]),
     }
 
@@ -51,15 +52,17 @@ def admin_feedback_view(request):
     return render(request, 'vehicle/admin_feedback.html', {})
 
 
-def login(request):
+def loginUser(request):
     if request.POST:
-        email    = request.POST.get('email')
+        username = request.POST.get('username')
         password = request.POST.get('password')
 
-        user = authenticate(request, email=email, password=password)
+        user = authenticate(request, username=username, password=password)
         
-        login(request, user)
-        return HttpResponseRedirect('admin-dashboard')
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect('admin-dashboard')
+
 
     return render(request, 'vehicle/adminlogin.html')
 

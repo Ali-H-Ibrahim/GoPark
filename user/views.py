@@ -36,24 +36,23 @@ def users_view(request):
     # calculate customer cars count and customer reservations count
 
     customerCarsCount = []
-    customerRservationsCount = []
+    # customerRservationsCount = []
 
     for customer in customers:
         customerCarsCount.append(models.Car.objects.filter(
             owner_id = customer.id
         ).count())
 
-        customerRservationsCount.append(models.Reservation.objects.filter(
-            customer_id = customer.id
-        ).count())        
+    #     customerRservationsCount.append(models.Reservation.objects.filter(
+    #         customer_id = customer.id
+    #     ).count())        
     
 
     # TODO : calculate customer total payments
 
 
     # packing all three lists
-    customerInfo = zip(customers, customerCarsCount, customerRservationsCount)
-
+    customerInfo = zip(customers, customerCarsCount)
 
     return render(request, 'admin_view_customer.html', {'customerInfo': customerInfo})
 
@@ -73,12 +72,12 @@ def add_user(request):
             print("User Type"+userType)
             print(userType)
             if userType == "Cashier":
-                a = models.User(first_name=first_name, last_name=last_name, phone_number=phone_number, username=username, email=email, password=password)
+                a = models.User(permission=userType, first_name=first_name, last_name=last_name, phone_number=phone_number, username=username, email=email, password=password)
                 a.save()
                 messages.success(request, 'Member was created successfully!')
                 return redirect('manage-users')
             elif userType == "Admin":
-                a = models.User(first_name=first_name, last_name=last_name, phone_number=phone_number, username=username, email=email, password=password)
+                a = models.User(permission=userType, first_name=first_name, last_name=last_name, phone_number=phone_number, username=username, email=email, password=password)
                 a.save()
                 messages.success(request, 'Member was created successfully!')
                 return redirect('manage-users') 
@@ -108,13 +107,14 @@ def update_user(request, pk):
             last_name=request.POST['last_name']
             username=request.POST['username']
             phone_number =request.POST['phone_number']
-            userType=request.POST['userType']
+            userType=request.POST['permission']
             email=request.POST['email']
             password=request.POST['password']
             password = make_password(password)
             print("User Type"+userType)
             print(userType)
 
+            user.permission=userType
             user.first_name=first_name
             user. last_name=last_name 
             user.phone_number=phone_number

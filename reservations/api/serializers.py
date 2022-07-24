@@ -7,7 +7,6 @@ class ReservationSerializer(ModelSerializer):
         fields = (
             'id',
             'reservation_type',
-            'reserved_period',
             'start_date',
             'end_date',
             'cost'

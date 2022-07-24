@@ -44,8 +44,6 @@
                 <th>Car Brand</th>
                 <th>Car PlateNumber</th>
                 <th>Car Color</th>
-                <th>Capacity</th>
-                <th>Weight</th>
                 <th>Edit</th>
                 <th>Delete</th>
               </tr>
@@ -57,8 +55,6 @@
 				<td>{{ car.brand }}</td>
 				<td>{{ car.plateNumber }}</td>
 				<td>{{ car.color }}</td>
-				<td>{{ car.weight }}</td>
-				<td>{{ car.capacity }}</td>
 
                 <td>
                   <a href="{% url 'cars:update-car' car.id  %}"

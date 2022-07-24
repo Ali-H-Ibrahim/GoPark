@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from core.models import Car, CarParking, Park, Brand, User
+from core.models import Car, CarParking, Brand, User
 
 
 class AdminCarAddForm(forms.Form):

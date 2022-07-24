@@ -1,18 +1,20 @@
 from django.forms import Form, ModelForm, ModelChoiceField
-from core.models import Reservation, User, Park
+from core.models import Reservation, Car
 
 
 class ReservationChoiceField(Form):
-        customer = ModelChoiceField(
-            queryset=User.objects.all(), empty_label="Customer Name", to_field_name='id'
-        )
-
-        park = ModelChoiceField(
-            queryset=Park.objects.filter(is_free=True), empty_label="Park Name", to_field_name='id'
+        car = ModelChoiceField(
+            queryset=Car.objects.all(), empty_label="Car", to_field_name='id'
         )
 
 class ReservationForm(ModelForm):
     class Meta:
         model  = Reservation
-        fields ='__all__'
+        fields = (
+            'car',
+            'reservation_type',
+            'start_date',
+            'end_date',
+            'cost'
+        )
 

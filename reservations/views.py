@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
-from core.models import User, Park, Reservation
+from core.models import Car, Reservation
 from .forms import ReservationForm, ReservationChoiceField
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
@@ -25,9 +25,9 @@ def showReservations(request):
 
 
 @login_required
-def customerReservationsPage(request, pk):
-    customerReservations = Reservation.objects.filter(
-        customer_id = pk
+def carReservationsPage(request, pk):
+    carReservations = Reservation.objects.filter(
+        car_id = pk
     )
 
     context = {'reservations': customerReservations}
@@ -40,20 +40,20 @@ def addReservation(request):
     reservationChoiceField = ReservationChoiceField()
 
     if request.method == 'POST':
-        customer = User.objects.get(id=request.POST.get('customer'))
-        park     = Park.objects.get(id=request.POST.get('park'))
+        car  = Car.objects.get(id=request.POST.get('car'))
+        # TODO: Do something with car parking
+        # car_parking = car_parking.objects.create(
+
+        # )
         
         Reservation.objects.create(
-            customer         = customer,
-            park             = park,
+            car              = car,
+            # car_parking      = car_parking,
             reservation_type = request.POST.get('reservation_type'),
-            reserved_period  = request.POST.get('reserved_period'),
             start_date       = request.POST.get('start_date'),
             end_date         = request.POST.get('end_date'),
             cost             = request.POST.get('cost')
         )
-
-        # TODO set old park status to free and the new one to busy
 
         return redirect('show-reservations')
 
@@ -72,11 +72,8 @@ def updateReservation(request, pk):
         form2 = ReservationChoiceField(request.POST)
 
         if form1.is_valid() and form2.is_valid():
-            form1.customer = form2.cleaned_data['customer']
-            form1.park     = form2.cleaned_data['park']
+            form1.car = form2.cleaned_data['car']
             form1.save()
-
-            # TODO set old park status to free and the new one to busy
 
             return redirect('show-reservations')
 

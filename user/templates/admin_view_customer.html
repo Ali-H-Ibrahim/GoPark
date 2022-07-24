@@ -39,43 +39,37 @@
                 <th>Email</th>
                 <th>Phone Number</th>
                 <th>No. Cars</th>
-                <th>No. Reservations</th>
                 <th>Total Payments</th>
                 <th>Update</th>
                 <th>Delete</th>
               </tr>
             </thead>
             <tbody>
-              {% for item1, item2, item3 in customerInfo %}
+              {% for customer, car in customerInfo %}
               <tr>
                 {% comment %}
                 <td>{{customer.get_name}}</td>
                 {% endcomment %}
-                <td>{{item1.first_name}} {{item1.last_name}}</td>
-                <td>{{item1.email}}</td>
-                <td>{{item1.phone_number}}</td>
+                <td>{{customer.first_name}} {{customer.last_name}}</td>
+                <td>{{customer.email}}</td>
+                <td>{{customer.phone_number}}</td>
                 <td>
-                  <a href="{% url 'cars:customer-cars' item1.id %}"
-                    >{{ item2 }}</a
+                  <a href="{% url 'cars:customer-cars' customer.id %}"
+                    >{{ car }}</a
                   >
                 </td>
-                <td>
-                  <a href="{% url 'customer-reservations' item1.id %}"
-                    >{{ item3 }}</a
-                  >
-                </td>
-                <td>{{ 'TODO' }}</td>
+                <td>TODO</td>
                 <td>
                   <a
                     style="color: red; text-decoration: none; font-size: 25px"
-                    href="{% url 'update-user' item1.id  %}"
+                    href="{% url 'update-user' customer.id  %}"
                     >&#9998;</a
                   >
                 </td>
                 <td>
                   <a
                     style="color: blue; text-decoration: none; font-size: 25px"
-                    href="{% url 'delete-user' item1.id  %}"
+                    href="{% url 'delete-user' customer.id  %}"
                     >&#10008;</a
                   >
                 </td>

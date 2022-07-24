@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import ReservationSerializer
-from core.models import Park, Reservation
+from core.models import Car, CarParking, Reservation
 
 
 @api_view(['POST'])
@@ -9,11 +9,13 @@ def addReservation(request):
     reservationSerializer = ReservationSerializer(data=request.data)
 
     # get user from request
-    user = request.user
+    car = Car.objects.get(id=request.POST.get('car_id'))
 
-    # find a free park
-    park = Park.objects.filter(is_free=True).first()
-    
+    # TODO: Do something with car parking
+        # car_parking = car_parking.objects.create(
+
+        # )
+
     # calculate parking cost
     parkingCost = 20000
 
@@ -25,10 +27,9 @@ def addReservation(request):
             
             # save reservation object
             Reservation.objects.create(
-                customer         = user,
-                park             = park,
+                car              = car,
+                # car_parking     = car_parking,
                 reservation_type = reservationSerializer.validated_data['reservation_type'],
-                reserved_period  = reservationSerializer.validated_data['reserved_period'],
                 start_date       = reservationSerializer.validated_data['start_date'],
                 end_date         = reservationSerializer.validated_data['end_date'],
                 cost             = parkingCost
@@ -36,7 +37,6 @@ def addReservation(request):
 
             return Response({
                 'message': 'Your reservation has been set successfully !',
-                'park': str(park)
             })
 
         return Response({'error': 'data is not valid'}, status=400)
@@ -44,27 +44,30 @@ def addReservation(request):
     return Response({'error': 'user not authenticated'}, status=400)
 
 
-@api_view(['GET'])
-def getUserReservations(request):
+@api_view(['POST'])
+def getCarReservations(request):
 
     # get user from request
     user = request.user
 
-    # get all user's reservations
-    userReservations = Reservation.objects.filter(
-        customer = user
+    car = Car.objects.get(id=request.POST.get('car_id'))
+
+    # get all car's reservations
+    carReservations = Reservation.objects.filter(
+        car = car
     )
 
-    if userReservations.count() == 0:
+    if carReservations.count() == 0:
         return Response({
             'message': 'No reservations yet'
         })
         
-    serializer = ReservationSerializer(userReservations, many=True)
+    serializer = ReservationSerializer(carReservations, many=True)
 
     return Response(serializer.data)
 
 
+# TODO
 @api_view(['POST'])
 def updateReservation(request):
     reservationID = request.query_params['id']
