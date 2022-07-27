@@ -42,24 +42,25 @@
               <tr>
                 <th>Owner Name</th>
                 <th>Car Brand</th>
-                <th>Car PlateNumber</th>
+                <th>Car Plate Number</th>
                 <th>Car Color</th>
-                <th>Capacity</th>
-                <th>Weight</th>
+                <th>Car Parkings</th>
                 <th>Edit</th>
                 <th>Delete</th>
               </tr>
             </thead>
             <tbody>
-              {% for car in data %}
+              {% for car, parkings in data %}
 			  <tr>
 				<td>{{ car.owner }}</td>
 				<td>{{ car.brand }}</td>
-				<td>{{ car.plateNumber }}</td>
-				<td>{{ car.color }}</td>
-				<td>{{ car.weight }}</td>
-				<td>{{ car.capacity }}</td>
-
+				<td>{{ car.plate_number }}</td>
+        <td>{{ car.color }}</td>
+        <td>
+          <a href="{% url 'car-parking' car.id %}"
+            >{{ parkings }}</a
+          >
+        </td>
                 <td>
                   <a href="{% url 'cars:update-car' car.id  %}"
                      style="color: red; text-decoration: none; font-size: 25px">&#9998;</a>

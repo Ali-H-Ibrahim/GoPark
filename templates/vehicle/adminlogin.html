@@ -25,11 +25,11 @@
 
     <h2>Login Here</h2>
 
-    <form method="POST" action="{% url 'home' %}">
+    <form method="POST" action="{% url 'login' %}">
       {% csrf_token %}
       <div class="inputBox">
-        <input type="text" name="email" required onkeyup="this.setAttribute('value', this.value);" value="" />
-        <label>Email</label>
+        <input type="text" name="username" required onkeyup="this.setAttribute('value', this.value);" value="" />
+        <label>Username</label>
       </div>
       <div class="inputBox">
         <input type="password" name="password" required onkeyup="this.setAttribute('value', this.value);" value="" />

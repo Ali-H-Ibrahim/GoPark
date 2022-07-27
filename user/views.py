@@ -1,8 +1,4 @@
 from django.shortcuts import render
-
-# from django.contrib.auth.models import User
-
-
 from django.shortcuts import render, redirect, reverse
 from . import models
 from django.contrib.auth.models import Group
@@ -13,16 +9,12 @@ from django.http import HttpResponseRedirect
 from core import models
 from django.contrib.auth.hashers import make_password
 from django.contrib import messages
-from knox.auth import AuthToken
 
+from .forms import UserForm
 
-
-
-# Create your views here.
 
 def manage_users(request):
     return render(request, 'admin_customer.html')
-
 
 
 def users_view(request):
@@ -34,64 +26,39 @@ def users_view(request):
         Q(email__icontains=q)
     )
 
-    # calculate customer cars count and customer reservations count
-
     customerCarsCount = []
-    customerRservationsCount = []
 
     for customer in customers:
         customerCarsCount.append(models.Car.objects.filter(
             owner_id = customer.id
         ).count())
 
-        customerRservationsCount.append(models.Reservation.objects.filter(
-            customer_id = customer.id
-        ).count())        
-    
-
     # TODO : calculate customer total payments
 
 
-    # packing all three lists
-    customerInfo = zip(customers, customerCarsCount, customerRservationsCount)
-
+    # packing the two lists
+    customerInfo = zip(customers, customerCarsCount)
 
     return render(request, 'admin_view_customer.html', {'customerInfo': customerInfo})
 
 
 def add_user(request):
-    choice = ['1', '0', 5000, 10000, 15000, 'Register', 'Admin', 'Cashier']
-    choice = {'choice': choice}
+    userForm = UserForm()
+
     if request.method == 'POST':
-            first_name=request.POST['first_name']
-            last_name=request.POST['last_name']
-            username=request.POST['username']
-            phone_number =request.POST['phone_number']
-            userType=request.POST['userType']
-            email=request.POST['email']
-            password=request.POST['password']
-            password = make_password(password)
-            print("User Type"+userType)
-            print(userType)
-            if userType == "Cashier":
-                a = models.User(first_name=first_name, last_name=last_name, phone_number=phone_number, username=username, email=email, password=password)
-                a.save()
-                _, token = AuthToken.objects.create(user=a)
-                messages.success(request, 'Member was created successfully!')
-                return redirect('manage-users')
-            elif userType == "Admin":
-                a = models.User(first_name=first_name, last_name=last_name, phone_number=phone_number, username=username, email=email, password=password)
-                a.save()
-                _, token = AuthToken.objects.create(user=a)
+            userForm = UserForm(request.POST)
+            if userForm.is_valid():
+                user = userForm.save(commit=False)
+                user.password = make_password(user.password)
+                user.save()
                 messages.success(request, 'Member was created successfully!')
                 return redirect('manage-users') 
             else:
-                messages.success(request, 'Member was not created')
-                return redirect('manage-users')
-    else:
-        choice = ['1', '0', 5000, 10000, 15000, 'Register', 'Admin', 'Cashier']
-        choice = {'choice': choice}
-        return render(request, 'admin_add_customer.html', choice)
+                messages.success(request, 'Info is not valid!')
+                return redirect('manage-users') 
+
+    context = {'form': userForm}
+    return render(request, 'admin_add_customer.html', context)
 
 
 def delete_user(request, pk):
@@ -102,35 +69,23 @@ def delete_user(request, pk):
 
 
 def update_user(request, pk):
-    choice = ['1', '0', 5000, 10000, 15000, 'Register', 'Admin', 'Cashier']
-    choice = {'choice': choice}
     user = models.User.objects.get(id=pk)
+    userForm = UserForm(instance=user)
 
     if request.method == 'POST':
-            first_name=request.POST['first_name']
-            last_name=request.POST['last_name']
-            username=request.POST['username']
-            phone_number =request.POST['phone_number']
-            userType=request.POST['userType']
-            email=request.POST['email']
-            password=request.POST['password']
-            password = make_password(password)
-            print("User Type"+userType)
-            print(userType)
+            userForm = UserForm(request.POST, instance=user)
+            if userForm.is_valid():
+                user = userForm.save(commit=False)
+                user.password = make_password(user.password)
+                user.save()
+                messages.success(request, 'Member was created successfully!')
+                return redirect('manage-users')  
+            else:
+                messages.success(request, 'User Info is not valid!')
+                return redirect('manage-users')  
 
-            user.first_name=first_name
-            user. last_name=last_name 
-            user.phone_number=phone_number
-            user.username=username
-            user.email=email
-            user.password=password
-            user.save()
-            _, token = AuthToken.objects.create(user=user)
-            messages.success(request, 'Member was created successfully!')
-            return redirect('users-view') 
-    data = {'choice': choice , 'user':user}
-
-    return render(request, 'update_user.html',data )    
+    context = {'form': userForm}
+    return render(request, 'admin_add_customer.html',context)    
 
 
 def admin_view_customer_invoice_view(request):

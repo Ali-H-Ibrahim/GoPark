@@ -35,92 +35,49 @@
 </head>
 
 <br><br><br><br><br>
-<h3 style="text-align:center;">CREATE CUSTOMER ACCOUNT</h3>
+<h3 style="text-align:center;">Add/Update Customer</h3>
 <div>
-  <form  action="add-user" method="POST" enctype="multipart/form-data"  style="margin-left:200px;margin-right:200px;">
-      {% csrf_token %}
+  <form method="POST" enctype="multipart/form-data" style="margin-left:200px;margin-right:200px;">
+  {% csrf_token %}
 
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <div class="form-row">
-                            <div class="col-md-6">
-                                <div class="form-label-group">
-                                    <label for="inputFirst">First Name</label>
-                                    <input type="text" class="form-control" name="first_name" placeholder="First Name" id="inputFirst" required="">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-label-group">
-                                  <label for="inputLast">Last Name</label>
-                                    <input type="text" class="form-control" name="last_name" placeholder="Last Name" id="inputLast" required="">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="form-row">
-                            <div class="col-md-6">
-                                <div class="form-label-group">
-                                  <label for="inputdescription">Username</label>
+    <label for="permission">Permission</label>
+    {% render_field form.permission class="form-control" %}
+    
+    <br/>
 
-                                    <input type="text" class="form-control" name="username" placeholder="Username" id="inputdescription" required="">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-label-group">
-                                   <label for="inputMobile">Email</label>
-                                    <input class="form-control" type="tel" name="email" placeholder="Email" id="inputMobile" required="">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                      <div class="form-group">
-                        <div class="form-row">
-                            <div class="col-md-6">
-                               <div class="form-label-group">
-                                   <label for="inputdescription">Password</label>
-                                    <input type="text" class="form-control" name="password" placeholder="Password" id="inputdescription" required="">
-                                </div>
-                            </div>
+    <label for="first_name">First Name</label>
+    {% render_field form.first_name class="form-control" %}
 
-                            
-                            <div class="col-md-6">
-                                <div class="form-label-group">
-                                           <select class="w3-select w3-border" name="userType">
-                                              <option value="{{ choice.7 }}">Choose User Role</option>
-                                              <option value="{{ choice.6 }}"> Admin</option>
-                                              <option value="{{ choice.7 }}">  cashier</option>
+    <br/>
 
-                                          </select>
-                                </div>
-                            </div>
+    <label for="Last_name">Last Name</label>
+    {% render_field form.last_name class="form-control" %}
 
-                            {% comment %} <div class="col-md-6">
-                              <div class="form-label-group">
-                                         <select class="w3-select w3-border" name="car">
-                                            <option value="{{ choice.0 }}">Choose Car </option>
-                                            <option value="{{ choice.1 }}"> BMW</option>
-                                            <option value="{{ choice.0}}">  SABA</option>
+    <br/>
 
-                                        </select>
-                              </div>
-                          </div> {% endcomment %}
+    <label for="username">Username</label>
+    {% render_field form.username class="form-control" %}
 
-                        </div>
-                        <div class="col-md-6">
-                          <div class="form-label-group">
-                            <label for="inputLast">phone_number</label>
-                              <input type="text" class="form-control" name="phone_number" placeholder="phone_number" id="inputLast" required="">
-                          </div>
-                      </div>
-                    </div>
-                  
+    <br/>
+    
+    <label for="email">Email</label>
+    {% render_field form.email class="form-control" %}
 
-    <input type="submit" >
+    <br/>
+
+    <label for="password">Password</label>
+    {% render_field form.password class="form-control"%}
+
+    <br/>
+
+    <label for="phone_number">Phone Number</label>
+    {% render_field form.phone_number class="form-control" %}
+
+    <br/><br/>
+    <input type="submit" value="Submit" />
   </form>
+
 </div>
-
-
 
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 {% endblock content %}

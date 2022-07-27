@@ -6,22 +6,18 @@ from django.db.models import Q
 from django.http import HttpResponseRedirect
 from core import models
 from feedbacks.models import Feedback
+from django.contrib.auth.hashers import make_password
+
 
 
 # ============================================================================================
 # ADMIN RELATED views start
 # ============================================================================================
 
+
 def home_view(request):
-    if request.user.is_authenticated:
-        return HttpResponseRedirect('admin-dashboard')
-
-    email    = request.POST.get('email')
-    password = request.POST.get('password')
-
-    user = authenticate(request, email=email, password=password)
-    
-    login(request, user)
+    if request.user.is_authenticated == False :
+        return HttpResponseRedirect('login')
 
     return HttpResponseRedirect('admin-dashboard')
 
@@ -38,10 +34,9 @@ def admin_dashboard_view(request):
         'total_cars': models.Car.objects.all().count(),
         'total_incomes': 10, 
         'total_feedback': Feedback.objects.all().count(),
-        'total_reservations': models.Reservation.objects.all().count(),
+        'total_parkings': models.Parking.objects.all().count(),
         'total_employees': 10, 
-        'total_parks': models.Park.objects.all().count(),
-        'available_parks': models.Park.objects.filter(is_free=True).count(),
+        'total_car_parkings': 10,
         'data': zip([10], [10]),
     }
 
@@ -55,6 +50,24 @@ def admin_report_view(request):
 
 def admin_feedback_view(request):
     return render(request, 'vehicle/admin_feedback.html', {})
+
+
+def loginUser(request):
+    if request.POST:
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+        
+        if user is not None and user.is_superuser:
+            login(request, user)
+            return HttpResponseRedirect('admin-dashboard')
+
+        else:
+            return render(request, 'vehicle/adminlogin.html')
+
+
+    return render(request, 'vehicle/adminlogin.html')
 
 
 def logoutUser(request):

@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer
-from core.models import Car, CarParking
+from core.models import Car, Parking
 
 
 class CarSerializer(ModelSerializer):
@@ -7,8 +7,8 @@ class CarSerializer(ModelSerializer):
         model = Car
         fields = '__all__'
 
-class CarParkingSerializer(ModelSerializer):
+class ParkingSerializer(ModelSerializer):
     class Meta:
-        model = CarParking
+        model = Parking
         fields = '__all__'
 

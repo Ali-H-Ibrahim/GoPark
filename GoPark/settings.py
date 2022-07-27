@@ -17,7 +17,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 BASE_TEMPLATES_DIR         = BASE_DIR / 'templates'
 CARS_TEMPLATES_DIR         = BASE_DIR / 'cars/templates'
-RESERVATIONS_TEMPLATES_DIR = BASE_DIR / 'reservations/templates'
+PARKINGS_TEMPLATES_DIR     = BASE_DIR / 'parkings/templates'
 USERS_TEMPLATES_DIR        = BASE_DIR / 'user/templates'
 FEEDBACKS_TEMPLATES_DIR    = BASE_DIR / 'feedbacks/templates'
 SETTINGS_TEMPLATES_DIR     = BASE_DIR / 'settings/templates' 
@@ -35,7 +35,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -48,6 +47,8 @@ INSTALLED_APPS = [
 
     # My-apps
     'core',
+    # 'ai'
+    'parkings',
     'user',
     'cars',
     'feedbacks',
@@ -75,7 +76,7 @@ TEMPLATES = [
         'DIRS': [
             BASE_TEMPLATES_DIR,
             CARS_TEMPLATES_DIR,
-            RESERVATIONS_TEMPLATES_DIR,
+            PARKINGS_TEMPLATES_DIR,
             USERS_TEMPLATES_DIR,
             FEEDBACKS_TEMPLATES_DIR
             ],

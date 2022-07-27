@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, render, redirect
-from core.models import Car, User
+from core.models import Car, User, Parking
 from .forms import CarForm, AdminCarAddForm
 from django.core.paginator import Paginator
 from django.urls import reverse
@@ -21,12 +21,22 @@ def car_list(request):
     car_list = Car.objects.filter(
         Q(brand__name__icontains=q)  |
         Q(brand__model__icontains=q) |
-        Q(plateNumber__icontains=q)  |
+        Q(plate_number__icontains=q)  |
         Q(owner__first_name__icontains=q) |
         Q(owner__last_name__icontains=q)
     )
     
-    return render(request, 'admin_car_list.html', {'data': car_list}) #zip(customers, car_list)
+    carParkingsCount = []
+
+    for car in car_list:
+        carParkingsCount.append(Parking.objects.filter(
+            car_id = car.id
+        ).count())        
+
+    # packing the two lists
+    data = zip(car_list, carParkingsCount)
+
+    return render(request, 'admin_car_list.html', {'data': data}) 
 
 
 # new [edit admin_car_detail.html]
