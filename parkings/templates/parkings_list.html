@@ -44,6 +44,7 @@
                 <th>End Date</th>
                 <th>End Time</th>
                 <th>Cost</th>
+                <th>Status</th>
                 <th>Edit</th>
                 <th>Delete</th>
               </tr>
@@ -56,9 +57,26 @@
 				<td>{{ parking.parking_type }}</td>
 				<td>{{ parking.entry_date }}</td>
         <td>{{ parking.entry_time }}</td>
+
+        {% if parking.end_date != None %}
 				<td>{{ parking.end_date }}</td>
+        {% else %}
+        <td>- - - - - -</td>
+        {% endif %}
+
+				{% if parking.end_time != None %}
 				<td>{{ parking.end_time }}</td>
+        {% else %}
+        <td>- - - - - -</td>
+        {% endif %}
+
+        {% if parking.cost != None %}
         <td>{{ parking.cost }} SP</td>
+        {% else %}
+        <td>- - - -</td>
+        {% endif %}
+
+        <td>{{ parking.status }}</td>
 
                 <td>
                   <a href="{% url 'update-parking' parking.id  %}"

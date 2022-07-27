@@ -18,8 +18,10 @@ def showParkings(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''    # filtering value (YYYY-MM-DD)
 
     parkings = Parking.objects.filter(
-        Q(entry_date__contains=q) 
-    )
+        Q(entry_date__contains=q) |
+        Q(end_date__contains=q) |
+        Q(car__brand__name__contains=q)
+    )   # TODO add floor filter
 
     context = {'parkings': parkings}
     return render(request, 'parkings_list.html', context)
@@ -49,11 +51,13 @@ def addParking(request):
             form1.floor = form2.cleaned_data['floor'] 
             parking = form1.save(commit=False)
             
-            # calculate parking cost
-            parked_hours   = form1.cleaned_data['end_time'].hour - form1.cleaned_data['entry_time'].hour
-            parked_minutes = form1.cleaned_data['end_time'].minute - form1.cleaned_data['entry_time'].minute
-            parked_time = parked_hours + parked_minutes / 60
-            parking.cost = parked_time * Setting.objects.first().hourly_cost
+            # # calculate parking cost
+            # parked_hours   = form1.cleaned_data['end_time'].hour - form1.cleaned_data['entry_time'].hour
+            # parked_minutes = form1.cleaned_data['end_time'].minute - form1.cleaned_data['entry_time'].minute
+            # parked_time = parked_hours + parked_minutes / 60
+            # parking.cost = parked_time * Setting.objects.first().hourly_cost
+            # parking.save()
+
             parking.save()
 
             parking.floor.busy_parks += 1
