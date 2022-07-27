@@ -27,5 +27,6 @@ class ParkingForm(ModelForm):
             'entry_time',
             'end_date',
             'end_time',
+            'status'
         )
 

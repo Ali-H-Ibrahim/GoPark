@@ -63,9 +63,16 @@ class Parking(models.Model):
 
     entry_date = models.DateField()
     entry_time = models.TimeField()
-    end_date   = models.DateField()
-    end_time   = models.TimeField()
+    end_date   = models.DateField(null=True, blank=True, default='-----')
+    end_time   = models.TimeField(null=True, blank=True)
     cost       = models.IntegerField(null=True, blank=True)
+
+    STATUS_CHOICES = (
+        ('Pending', 'Pending'),
+        ('Active', 'Active'),
+        ('Finished', 'Finished')
+    )
+    status = models.CharField(max_length=100, choices=STATUS_CHOICES)
 
     class Meta:
         ordering = ['-entry_date']
