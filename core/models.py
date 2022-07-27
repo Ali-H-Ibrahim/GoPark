@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models import CheckConstraint, Q, F
+
 
 
 class User(AbstractUser):
@@ -10,18 +12,18 @@ class User(AbstractUser):
     )
     permission = models.CharField(max_length=100, choices=PERMISSIONS_TYPES)
 
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    email = models.EmailField(unique=True, null=True)
+    first_name   = models.CharField(max_length=100)
+    last_name    = models.CharField(max_length=100)
+    email        = models.EmailField(unique=True, null=True)
     phone_number = models.CharField(max_length=100)
-    avatar = models.ImageField(null=True, blank=True)
+    avatar       = models.ImageField(null=True, blank=True)
 
     def __str__(self):
         return str(self.first_name) + ' ' + str(self.last_name)
 
 
 class Brand(models.Model):
-    name = models.CharField(max_length=200, null=False)
+    name  = models.CharField(max_length=200, null=False)
     model = models.CharField(max_length=200, null=True, blank=True)
 
     def __str__(self):
@@ -32,59 +34,54 @@ class Car(models.Model):
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='users')
     brand = models.ForeignKey(Brand, on_delete=models.SET_NULL, null=True)
 
-    plateNumber = models.CharField(max_length=100)
-    color = models.CharField(max_length=100)
+    plate_number = models.CharField(max_length=100)
+    color        = models.CharField(max_length=100)
 
     def __str__(self):
-        return str(self.brand) + ' - ' + str(self.color) + ' - ' + str(self.plateNumber)
+        return str(self.brand) + ' - ' + str(self.color) + ' - ' + str(self.plate_number)
 
 
 class Floor(models.Model):
     floor_number = models.IntegerField(null=True, blank=True)
-    size = models.IntegerField(null=True, blank=True)
-    is_free = models.BooleanField(default=True)
+    num_of_parks = models.IntegerField(null=True, blank=True)
+    busy_parks   = models.IntegerField(null=False, default=0)
+    is_free      = models.BooleanField(null=False, default=True)
+
+    def __str__(self):
+        return 'Floor '+str(self.floor_number)
 
 
-class CarParking(models.Model):
-    car = models.ForeignKey(Car, on_delete=models.SET_NULL, null=True)
+class Parking(models.Model):
+    car   = models.ForeignKey(Car, on_delete=models.SET_NULL, null=True)
     floor = models.ForeignKey(Floor, on_delete=models.SET_NULL, null=True)
 
-    entry_date = models.DateTimeField(auto_now_add=True)
-    end_date = models.DateTimeField()
-    cost = models.IntegerField()
+    PARKINGS_TYPES = (
+        ('Visitor', 'Visitor'),
+        ('Reserved', 'Reserved'),
+    )
+    parking_type = models.CharField(max_length=100, choices=PARKINGS_TYPES)
+
+    entry_date = models.DateField()
+    entry_time = models.TimeField()
+    end_date   = models.DateField()
+    end_time   = models.TimeField()
+    cost       = models.IntegerField(null=True, blank=True)
 
     class Meta:
         ordering = ['-entry_date']
+        # constraints = [
+        #     CheckConstraint(
+        #         check = Q(end_date__gte=F('entry_date')), 
+        #         name = 'check_start_date',
+        #     ),
+        # ]
 
     def __str__(self):
-        return str(self.park)
-
-
-class Reservation(models.Model):
-    car = models.ForeignKey(Car, on_delete=models.SET_NULL, null=True)
-    car_parking = models.ForeignKey(CarParking, on_delete=models.SET_NULL, null=True)
-
-    # make choices for reservation type then pass them to type field
-    RESERVATION_TYPES = (
-        ('One Time', 'One Time'),
-        ('Daily', 'Daily'),
-        ('Weekly', 'Weekly')
-    )
-
-    reservation_type = models.CharField(max_length=100, choices=RESERVATION_TYPES)
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
-    cost = models.IntegerField(null=True)
-
-    class Meta:
-        ordering = ['start_date']
-
-    def __str__(self):
-        return str(self.car) + ' - ' + str(self.car_parking) + ' - ' + str(self.reservation_type)
+        return 'Parking NO. '+str(self.id)
 
 
 class Payment(models.Model):
-    reservation = models.ForeignKey(Reservation, on_delete=models.SET_NULL, null=True)
+    parking = models.ForeignKey(Parking, on_delete=models.SET_NULL, null=True)
     PAYMENT_TYPES = (
         ('Cash', 'Cash'),
         ('MasterCard', 'MasterCard'),
@@ -92,24 +89,4 @@ class Payment(models.Model):
         ('PayPal', 'PayPal')
     )
 
-    reservation_type = models.CharField(max_length=100, choices=PAYMENT_TYPES)
-
-
-
-# class Park(models.Model):
-#     name = models.CharField(max_length=100, null=False, default='')
-#     floor = models.IntegerField(null=True, blank=True)
-#     size = models.CharField(max_length=100, null=True, blank=True)
-#     is_free = models.BooleanField(default=True)
-#
-#     def __str__(self):
-#         return str(self.name) + str(self.floor)
-
-# class History(models.Model):
-#     customer = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-#     carParking = models.ForeignKey(CarParking, on_delete=models.SET_NULL, null=True)
-#     total_parking_hours = models.DurationField()
-#     total_payments = models.IntegerField()
-#
-#     def __str__(self):
-#         return str(self.carParking)
+    payment_type = models.CharField(max_length=100, choices=PAYMENT_TYPES)

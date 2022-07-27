@@ -34,9 +34,9 @@ def admin_dashboard_view(request):
         'total_cars': models.Car.objects.all().count(),
         'total_incomes': 10, 
         'total_feedback': Feedback.objects.all().count(),
-        'total_reservations': models.Reservation.objects.all().count(),
+        'total_parkings': models.Parking.objects.all().count(),
         'total_employees': 10, 
-        'total_car_parkings': models.CarParking.objects.all().count(),
+        'total_car_parkings': 10,
         'data': zip([10], [10]),
     }
 
@@ -59,9 +59,12 @@ def loginUser(request):
 
         user = authenticate(request, username=username, password=password)
         
-        if user is not None:
+        if user is not None and user.is_superuser:
             login(request, user)
             return HttpResponseRedirect('admin-dashboard')
+
+        else:
+            return render(request, 'vehicle/adminlogin.html')
 
 
     return render(request, 'vehicle/adminlogin.html')

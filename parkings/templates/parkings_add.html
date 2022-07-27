@@ -35,7 +35,7 @@
 </head>
 
 <br><br><br><br><br>
-<h1 style="text-align:center;">ADD/UPDATE Reservation</h1>
+<h1 style="text-align:center;">ADD/UPDATE Parking</h1>
 <div>
   <form method="POST" enctype="multipart/form-data" style="margin-left:200px;margin-right:200px;">
     
@@ -46,23 +46,35 @@
 
     <br><br>
 
-    <label for="reservation_type">Reservation Type</label>
-    {% render_field form1.reservation_type class="form-control" placeholder="Reservation Type" %}
+    <label for="floor">Floor</label>
+    {% render_field form2.floor class="form-control" placeholder="Floor" %}
 
     <br><br>
 
-    <label for="start_date">Start Date</label>
-    {% render_field form1.start_date class="form-control" placeholder="YYYY-MM-DD HH:MM:SS" %}
+    <label for="parking_type">Parking Type</label>
+    {% render_field form1.parking_type class="form-control" %}
+
+    <br><br>
+
+    <label for="entry_date">Entry Date</label>
+    {% render_field form1.entry_date type="date" class="form-control" %}
+
+    <br><br>
+
+    <label for="entry_date">Entry Time</label>
+    {% render_field form1.entry_time type="time" class="form-control" %}
 
     <br><br>
 
     <label for="end_date">End Date</label>
-    {% render_field form1.end_date class="form-control" placeholder="YYYY-MM-DD" %}
+    {% render_field form1.end_date type="date" class="form-control" %}
 
     <br><br>
-  
-    <label for="cost">Cost</label>
-    {% render_field form1.cost class="form-control" placeholder="Cost" %}
+
+    <label for="entry_date">End Time</label>
+    {% render_field form1.end_time type="time" class="form-control" %}
+
+    <br><br>
 
     <input type="submit" value="Submit">
   </form>

@@ -9,10 +9,10 @@
       <div class="card">
         <div class="card-header">
           <h3 style="color: red; text-align: center">
-            Reservations
+          Parkings
           </h3>
 
-            <form action="{% url 'show-reservations' %}" method="GET" class="header__search">
+            <form action="{% url 'show-parkings' %}" method="GET" class="header__search">
               <label>
                 <svg
                   version="1.1"
@@ -37,29 +37,35 @@
             <thead>
               <tr>
                 <th>Car</th>
-                <th>Reservation Type</th>
-                <th>Start Date</th>
+                <th>Floor</th>
+                <th>Parking Type</th>
+                <th>Entry Date</th>
+                <th>Entry Time</th>
                 <th>End Date</th>
+                <th>End Time</th>
                 <th>Cost</th>
                 <th>Edit</th>
                 <th>Delete</th>
               </tr>
             </thead>
             <tbody>
-              {% for reservation in reservations %}
+        {% for parking in parkings %}
 			  <tr>
-				<td>{{ reservation.car }}</td>
-				<td>{{ reservation.reservation_type }}</td>
-				<td>{{ reservation.start_date }}</td>
-				<td>{{ reservation.end_date }}</td>
-				<td>{{ reservation.cost }} SP</td>
+				<td>{{ parking.car }}</td>
+        <td>{{ parking.floor }}</td>
+				<td>{{ parking.parking_type }}</td>
+				<td>{{ parking.entry_date }}</td>
+        <td>{{ parking.entry_time }}</td>
+				<td>{{ parking.end_date }}</td>
+				<td>{{ parking.end_time }}</td>
+        <td>{{ parking.cost }} SP</td>
 
                 <td>
-                  <a href="{% url 'update-reservation' reservation.id  %}"
+                  <a href="{% url 'update-parking' parking.id  %}"
                      style="color: red; text-decoration: none; font-size: 25px">&#9998;</a>
                 </td>
                 <td>
-					<a href="{% url 'delete-reservation' reservation.id %}"
+					<a href="{% url 'delete-parking' parking.id %}"
                      style="color: blue; text-decoration: none; font-size: 25px">&#10008;</a>
                 </td>
               </tr>

@@ -1,20 +1,18 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import ReservationSerializer
-from core.models import Car, CarParking, Reservation
+from .serializers import ParkingSerializer
+from core.models import Car, Parking
 
 
 @api_view(['POST'])
 def addReservation(request):
-    reservationSerializer = ReservationSerializer(data=request.data)
+    parkingSerializer = ParkingSerializer(data=request.data)
 
     # get user from request
     car = Car.objects.get(id=request.POST.get('car_id'))
 
     # TODO: Do something with car parking
-        # car_parking = car_parking.objects.create(
-
-        # )
+       
 
     # calculate parking cost
     parkingCost = 20000
@@ -23,15 +21,15 @@ def addReservation(request):
     if user.is_authenticated:
 
         # check if data is valid
-        if reservationSerializer.is_valid():
+        if parkingSerializer.is_valid():
             
             # save reservation object
-            Reservation.objects.create(
+            Parking.objects.create(
                 car              = car,
-                # car_parking     = car_parking,
-                reservation_type = reservationSerializer.validated_data['reservation_type'],
-                start_date       = reservationSerializer.validated_data['start_date'],
-                end_date         = reservationSerializer.validated_data['end_date'],
+                # car_parking    = car_parking,
+                parking_type     = 'Reserved',
+                entry_date       = parkingSerializer.validated_data['entry_date'],
+                end_date         = parkingSerializer.validated_data['end_date'],
                 cost             = parkingCost
             )
 
@@ -53,8 +51,9 @@ def getCarReservations(request):
     car = Car.objects.get(id=request.POST.get('car_id'))
 
     # get all car's reservations
-    carReservations = Reservation.objects.filter(
-        car = car
+    carReservations = Parking.objects.filter(
+        car = car,
+        parking_type='Reserved'
     )
 
     if carReservations.count() == 0:
@@ -62,7 +61,7 @@ def getCarReservations(request):
             'message': 'No reservations yet'
         })
         
-    serializer = ReservationSerializer(carReservations, many=True)
+    serializer = ParkingSerializer(carReservations, many=True)
 
     return Response(serializer.data)
 
@@ -78,7 +77,7 @@ def deleteReservation(request):
     reservationID = request.query_params['id']
 
     if reservationID != None:
-        reservation = Reservation.objects.get(id=reservationID)
+        reservation = Parking.objects.get(id=reservationID)
         if reservation != None:
             reservation.delete()
             return Response({

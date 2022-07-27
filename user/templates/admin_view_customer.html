@@ -37,6 +37,7 @@
               <tr>
                 <th>Name</th>
                 <th>Email</th>
+                <th>Username</th>
                 <th>Phone Number</th>
                 <th>No. Cars</th>
                 <th>Total Payments</th>
@@ -52,6 +53,7 @@
                 {% endcomment %}
                 <td>{{customer.first_name}} {{customer.last_name}}</td>
                 <td>{{customer.email}}</td>
+                <td>{{customer.username}}</td>
                 <td>{{customer.phone_number}}</td>
                 <td>
                   <a href="{% url 'cars:customer-cars' customer.id %}"

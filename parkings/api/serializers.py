@@ -1,12 +1,12 @@
 from rest_framework.serializers import ModelSerializer
-from core.models import Reservation
+from core.models import Parking
 
-class ReservationSerializer(ModelSerializer):
+class ParkingSerializer(ModelSerializer):
     class Meta:
-        model = Reservation
+        model = Parking
         fields = (
             'id',
-            'reservation_type',
+            'parking_type',
             'start_date',
             'end_date',
             'cost'

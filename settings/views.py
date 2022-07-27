@@ -10,10 +10,11 @@ def site_settings(request):
 
     if request.method == 'POST':        
         Setting.objects.update(
-            name    = request.POST.get('name'),
-            email   = request.POST.get('email'),
-            phone   = request.POST.get('phone'),
-            address = request.POST.get('address'),
+            garage_name = request.POST.get('garage_name'),
+            email       = request.POST.get('email'),
+            phone       = request.POST.get('phone'),
+            address     = request.POST.get('address'),
+            hourly_cost = request.POST.get('hourly_cost')
         )
 
         return redirect(reverse('settings:site-settings'))
